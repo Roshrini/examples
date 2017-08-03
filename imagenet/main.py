@@ -119,10 +119,10 @@ def main():
     # Data loading code
     print("Loading Data...")
     if args.data == 'dummy':
-        train_data = torch.randn(args.dummy_train_data_num, 3, 224, 224).cuda()
-        train_label = torch.randn(args.dummy_train_data_num).cuda()
-        val_data = torch.randn(args.dummy_val_data_num, 3, 224, 224).cuda()
-        val_label = torch.randn(args.dummy_val_data_num).cuda()
+        train_data = torch.randn(args.dummy_train_data_num, 3, 224, 224)
+        train_label = torch.randn(args.dummy_train_data_num)
+        val_data = torch.randn(args.dummy_val_data_num, 3, 224, 224)
+        val_label = torch.randn(args.dummy_val_data_num)
         train_dataset = torch.utils.data.TensorDataset(train_data, train_label)
         val_dataset = torch.utils.data.TensorDataset(val_data, val_label)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size,
