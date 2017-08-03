@@ -10,7 +10,7 @@ import torch.backends.cudnn as cudnn
 import torch.distributed as dist
 import torch.optim
 import torch.utils.data
-import torch.utils.data.distributed
+#import torch.utils.data.distributed
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
@@ -117,6 +117,7 @@ def main():
     cudnn.benchmark = True
 
     # Data loading code
+    print("Loading Data...")
     if args.data == 'dummy':
         train_data = torch.randn(args.dummy_train_data_num, 3, 224, 224).cuda()
         train_label = torch.randn(args.dummy_train_data_num).cuda()
