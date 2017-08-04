@@ -120,9 +120,9 @@ def main():
     print("Loading Data...")
     if args.data == 'dummy':
         train_data = torch.randn(args.dummy_train_data_num, 3, 224, 224)
-        train_label = torch.randn(args.dummy_train_data_num)
+        train_label = torch.randn(args.dummy_train_data_num).fill_(1)
         val_data = torch.randn(args.dummy_val_data_num, 3, 224, 224)
-        val_label = torch.randn(args.dummy_val_data_num)
+        val_label = torch.randn(args.dummy_val_data_num).fill_(1)
         train_dataset = torch.utils.data.TensorDataset(train_data, train_label)
         val_dataset = torch.utils.data.TensorDataset(val_data, val_label)
         train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size,
@@ -204,10 +204,10 @@ def train(train_loader, model, criterion, optimizer, epoch):
 
         # compute output
         output = model(input_var)
-        loss = criterion(output, target_var)
-
+        loss = criterion(output, target_var.long())
+        
         # measure accuracy and record loss
-        prec1, prec5 = accuracy(output.data, target, topk=(1, 5))
+        prec1, prec5 = accuracy(output.data, target.long(), topk=(1, 5))
         losses.update(loss.data[0], input.size(0))
         top1.update(prec1[0], input.size(0))
         top5.update(prec5[0], input.size(0))
@@ -246,13 +246,12 @@ def validate(val_loader, model, criterion):
         target = target.cuda(async=True)
         input_var = torch.autograd.Variable(input, volatile=True)
         target_var = torch.autograd.Variable(target, volatile=True)
-
         # compute output
         output = model(input_var)
-        loss = criterion(output, target_var)
+        loss = criterion(output, target_var.long())
 
         # measure accuracy and record loss
-        prec1, prec5 = accuracy(output.data, target, topk=(1, 5))
+        prec1, prec5 = accuracy(output.data, target.long(), topk=(1, 5))
         losses.update(loss.data[0], input.size(0))
         top1.update(prec1[0], input.size(0))
         top5.update(prec5[0], input.size(0))
