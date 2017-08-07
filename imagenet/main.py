@@ -162,11 +162,14 @@ def main():
         validate(val_loader, model, criterion)
         return
 
+    total_training_time = 0
     for epoch in range(args.start_epoch, args.epochs):
         adjust_learning_rate(optimizer, epoch)
 
         # train for one epoch
+        start_time = time.time()
         train(train_loader, model, criterion, optimizer, epoch)
+        total_training_time += time.time() - start_time
 
         # evaluate on validation set
         prec1 = validate(val_loader, model, criterion)
@@ -181,6 +184,9 @@ def main():
             'best_prec1': best_prec1,
             'optimizer' : optimizer.state_dict(),
         }, is_best)
+    print("Training time: %s" % (str(total_training_time)))
+    print("Images processed per sec: %s" % (str((args.dummy_train_data_num) * \
+                                            (args.epochs - args.start_epoch) / total_training_time)))
 
 
 def train(train_loader, model, criterion, optimizer, epoch):
